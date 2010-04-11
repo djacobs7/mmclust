@@ -23,6 +23,12 @@ package flare.vis.data
 	 */
 	public class NodeSprite extends DataSprite
 	{
+		//cheating!
+		
+		public var reference:int;
+		public var dendrogramHeight:Number;
+		
+		
 		/** Flag indicating inlinks, edges that point to this node. */
 		public static const IN_LINKS:uint    = 1;
 		/** Flag indicating outlinks, edges that point away from node. */

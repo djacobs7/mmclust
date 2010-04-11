@@ -4,7 +4,6 @@ package flare.demos
 	import flare.animate.Transition;
 	import flare.animate.TransitionEvent;
 	import flare.animate.Transitioner;
-	import flare.demos.util.GraphUtil;
 	import flare.demos.util.Link;
 	import flare.query.methods.add;
 	import flare.util.Shapes;
@@ -33,6 +32,8 @@ package flare.demos
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
+	import minimax.DendrogramUtil;
+	
 	/**
 	 * Demo showcasing a number of tree and graph layout algorithms.
 	 */
@@ -51,12 +52,21 @@ package flare.demos
 		
 		public override function init():void
 		{
+
+			
 			// create a collection of layout options
 			opt = options(bounds.width, bounds.height);
 			idx = 0;
 			
 			// create data and set defaults
-			var data:Data = GraphUtil.diamondTree(3,4,4);
+			
+			
+			//var data:Data = GraphUtil.diamondTree(3,4,4);
+			
+			var data:Data = DendrogramUtil.dendrogram( demos.dendrString );
+			
+			(opt[5]['op'] as DendrogramLayout).distanceProperty = 'dendrogramHeight';
+			
 			data.nodes.setProperties(opt[idx].nodes);
 			data.edges.setProperties(opt[idx].edges);
 			for (var j:int=0; j<data.nodes.length; ++j) {

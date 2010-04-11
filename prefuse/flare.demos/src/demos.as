@@ -15,7 +15,7 @@ package {
 	import flare.demos.util.Link;
 	import flare.demos.util.LinkGroup;
 	import flare.display.LineSprite;
-	 
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -23,6 +23,9 @@ package {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
 
 	[SWF(width="1000",height="700",backgroundColor="#ffffff", frameRate="30")]
 	public class demos extends Sprite
@@ -35,12 +38,37 @@ package {
 		private var _line:LineSprite;
 		private var _cur:int = -1;
 		
+		public static var dendrString:String;
+		
 		public function demos()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onResize);
 			
+			
+			loadDendr();
+
+		}
+		
+		public function loadDendr():void
+		{
+			var PATH:String = "http://localhost:3004/dendrexample1000.txt";
+			var urlRequest:URLRequest = new URLRequest(PATH);
+			var urlLoader:URLLoader = new URLLoader();
+			urlLoader.dataFormat = URLLoaderDataFormat.TEXT; // default
+			urlLoader.addEventListener(Event.COMPLETE, dendrLoaded);
+			urlLoader.load(urlRequest);
+			
+		}
+		
+		
+		public function dendrLoaded(evt:Event):void
+		{
+			dendrString = evt.target.data;
+			
+			
+			trace(dendrString);
 			// create logo
 			_logo = new FlareLogo();
 			_logo.play();
@@ -49,8 +77,8 @@ package {
 			// create demos
 			createDemos();
 			onResize();
-		}
 		
+		}
 		private function createDemos():void
 		{
 			addChild(_line = new LineSprite());
