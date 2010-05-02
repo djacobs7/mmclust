@@ -260,7 +260,7 @@ package flare.demos
 				{
 					name: "Dendrogram",
 					op: new DendrogramLayout(),
-					nodes: {alpha: 0, visible: false},
+					nodes: {alpha: 0.5 },
 					edges: {lineWidth:2},
 					straighten: true
 				},

@@ -24,10 +24,10 @@ package flare.vis.data
 	public class NodeSprite extends DataSprite
 	{
 		//cheating!
-		
 		public var reference:int;
 		public var dendrogramHeight:Number;
-		
+		public var prototypeReference:int;
+
 		
 		/** Flag indicating inlinks, edges that point to this node. */
 		public static const IN_LINKS:uint    = 1;

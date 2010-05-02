@@ -26,6 +26,9 @@ package {
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	
+	import minimax.models.LabelData;
+	import minimax.views.NodeRendererBase;
 
 	[SWF(width="1000",height="700",backgroundColor="#ffffff", frameRate="30")]
 	public class demos extends Sprite
@@ -38,7 +41,11 @@ package {
 		private var _line:LineSprite;
 		private var _cur:int = -1;
 		
+		
+		private static const URL_BASE:String = "http://localhost:3004/";
 		public static var dendrString:String;
+		
+		private var labelData:LabelData = new LabelData();
 		
 		public function demos()
 		{
@@ -46,15 +53,36 @@ package {
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onResize);
 			
+			NodeRendererBase.instance.labelData = labelData;
 			
-			loadDendr();
+			loadData();
 
 		}
 		
-		public function loadDendr():void
+		public function loadData():void
 		{
-			var PATH:String = "http://localhost:3004/dendrexample1000.txt";
-			var urlRequest:URLRequest = new URLRequest(PATH);
+			var LABEL_DATA_PATH:String = URL_BASE + "labels100.txt"
+			var urlRequest:URLRequest = new URLRequest(LABEL_DATA_PATH);
+			var urlLoader:URLLoader = new URLLoader();
+			urlLoader.dataFormat = URLLoaderDataFormat.TEXT; // default
+			urlLoader.addEventListener(Event.COMPLETE, labelsLoaded);
+			urlLoader.load(urlRequest);
+			
+		}
+		
+		private function labelsLoaded(evt:Event):void
+		{
+			var loadedData:String = evt.target.data;
+			labelData.setDataFromTxt( loadedData );
+
+			loadDendr();	
+		}
+		
+		public function loadDendr( ):void
+		{
+		
+			var TREE_PATH:String = URL_BASE + "dendrexample100.txt";
+			var urlRequest:URLRequest = new URLRequest(TREE_PATH);
 			var urlLoader:URLLoader = new URLLoader();
 			urlLoader.dataFormat = URLLoaderDataFormat.TEXT; // default
 			urlLoader.addEventListener(Event.COMPLETE, dendrLoaded);
@@ -67,8 +95,6 @@ package {
 		{
 			dendrString = evt.target.data;
 			
-			
-			trace(dendrString);
 			// create logo
 			_logo = new FlareLogo();
 			_logo.play();

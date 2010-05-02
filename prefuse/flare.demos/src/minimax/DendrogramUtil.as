@@ -4,6 +4,8 @@ package minimax
 	import flare.vis.data.NodeSprite;
 	import flare.vis.data.Tree;
 	
+	import minimax.views.NodeRendererBase;
+	
 	public class DendrogramUtil
 	{
 		public function DendrogramUtil()
@@ -21,9 +23,12 @@ package minimax
 			
 			var t:Tree = new Tree();
 			var currentNode:NodeSprite = t.addRoot();
+			currentNode.renderer = NodeRendererBase.instance;
 			
 			var stack:Array = [];
 			
+			
+			//remove new lines at end of input file:
 			var idx:int = dendrLines.length - 1;
 			while(true)
 			{
@@ -45,7 +50,14 @@ package minimax
 				
 				if ( currentReference < 0 )
 				{
+					//this is a strange line of code here.  it is like this because we subtracted -1 down below.
+					//this could be more elegant.
+					currentNode['reference'] = -currentNode['reference'] - 2;
 					currentNode['dendrogramHeight'] = 0;
+					currentNode.prototypeReference = currentNode['reference'];
+					
+					
+					currentNode.renderer = NodeRendererBase.instance;
 				}
 				else
 				{
@@ -57,13 +69,17 @@ package minimax
 					var prototypeReference:int = lineData[3];
 					
 					currentNode['dendrogramHeight'] = dendrogramHeight;
+					currentNode.prototypeReference = prototypeReference - 1;
+					
+					currentNode.renderer = NodeRendererBase.instance;
 					
 					var leftChild:NodeSprite = t.addChild( currentNode );
 					leftChild['reference'] = leftReference - 1;
-					
+
 					var rightChild:NodeSprite = t.addChild( currentNode );
 					rightChild['reference'] = rightReference -1;
-	
+					
+					
 					stack.push( leftChild );
 					stack.push( rightChild );
 				}			
@@ -72,7 +88,6 @@ package minimax
 			return t;
 			
 		}
-		
 		
 	}
 }
